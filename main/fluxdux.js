@@ -17,7 +17,7 @@ FluxDux.prototype = {
 		return sDispatcher;
 	},
 	createActions : function(names) {
-		var actions = new Actions(names);
+		var actions = new Actions(this, names);
 		this.dispatcher().watch(actions);
 		return actions;
 	},
