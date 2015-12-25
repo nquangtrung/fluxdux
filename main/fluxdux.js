@@ -1,6 +1,7 @@
 // /media/data2/workspace/personal-learning-react/src/fluxdux
-var Dispatcher = require('./dispatcher.js');
-var Actions = require('./actions.js');
+var Dispatcher  = require('./dispatcher.js'),
+    Actions     = require('./actions.js'),
+    Store       = require('./store.js');
 
 // Private dispatcher
 var sDispatcher = null;
@@ -15,9 +16,6 @@ FluxDux.prototype = {
 		}
 		return sDispatcher;
 	},
-	createStores : function() {
-
-	},
 	createActions : function(names) {
 		var actions = new Actions(names);
 		this.dispatcher().watch(actions);
@@ -28,7 +26,11 @@ FluxDux.prototype = {
 	},
 	dispatch : function(type, data) {
 		this.dispatcher().dispatch(type, data);
-	}
+	},
+	createStore : function(name, proto) {
+        var store = new Store(this, name, proto);
+        return store;
+    }
 };
 
 var fluxduxer = new FluxDux();
