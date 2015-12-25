@@ -1,2 +1,3 @@
 /main/main.iml
-.idea/*
+/.idea/*
+/out/*
