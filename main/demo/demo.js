@@ -4,50 +4,76 @@ var FluxDux = require('../fluxdux.js');
 var store = FluxDux.createStore('notes', {
 	initialState : function() {
 		return [];
-	}
-});
-var store2 = FluxDux.createStore('notes2', {
-    initialState : function() {
-        return [];
+	},
+    add : function(state, data) {
+        data.visibility = "visible";
+        state.push(data);
+        return state;
+    },
+    delete : function(state, data) {
+        state.splice(data.index, 1);
+        return state;
+    },
+    author : function(state, data) {
+        for (var idx in state) {
+            var note = state[idx];
+            if (note.author === data.author) {
+                note.visibility = "visible";
+            } else {
+                note.visibility = "hidden";
+            }
+        }
+        return state;
+    },
+    all : function (state) {
+        for (var idx in state) {
+            var note = state[idx];
+            note.visibility = "visible";
+        }
+        return state;
     }
 });
+
 var actions = FluxDux.createActions(
 	[ "add", "delete", "list" ]
 );
 
-var handler = FluxDux.handle(actions, {
+FluxDux.handle(actions, {
 	add : function(data) {
 		console.log("add");
-		console.log(data);
-        store.trigger();
+        store.reduce("add", data);
 	},
 	delete : function(data) {
 		console.log("delete");
-		console.log(data);
-        store2.trigger();
-	},
-	list : function(data) {
-		console.log("list");
-		console.log(data);
+        store.reduce("delete", data);
 	}
 });
 
 var Demo = {
 	start : function() {
 		store.change(function(store) {
-            console.log("Store changed");
-            console.log(store.state);
-        });
-        store2.change(function(store) {
-            console.log("Store2 changed");
-            console.log(store.state);
+            console.log("state updated");
+            for (var idx in store.state) {
+                var note = store.state[idx];
+                if (note.visibility === 'visible') {
+                    console.log(idx, note);
+                }
+            }
         });
 
-		FluxDux.dispatch(actions.add, { text: "text1", author: "author1" } );
-		FluxDux.dispatch(actions.add, { text: "text2", author: "author2" } );
-		FluxDux.dispatch(actions.delete, { text: "text1", author: "author1" } );
-		FluxDux.dispatch(actions.list, { text: "text1", author: "author1" } );
+        actions.add({ text: "text1", author: "author1" });
+        actions.add({ text: "text4", author: "author1" });
+        actions.add({ text: "text5", author: "author1" });
+        actions.add({ text: "text6", author: "author1" });
+        actions.add({ text: "text2", author: "author2" });
+        actions.add({ text: "text7", author: "author2" });
+        actions.add({ text: "text8", author: "author2" });
+        actions.delete({ index: 1 });
 		actions.add({ text: "text3", author: "author3" });
+        store.reduce("author", { author: "author1" });
+        store.reduce("author", { author: "author3" });
+        store.reduce("author", { author: "author2" });
+        store.reduce("all");
 	}
 };
 

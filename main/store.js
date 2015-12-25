@@ -1,12 +1,15 @@
-function Store(context, name, proto) {
+var Reducer = require('./reducer.js');
+
+function Store(context, name, reducer) {
     this.name = name;
     this.context = context;
+    this.reducer = new Reducer(reducer);
     this.storeActions = context.createActions(
         [ "change" ]
     );
 
-    if (this.initialState) {
-        this. state = this.initialState();
+    if (this.reducer.initialState) {
+        this.state = this.reducer.initialState();
     }
 }
 
@@ -15,9 +18,7 @@ Store.prototype = {
     context : null,
     state   : null,
     name    : null,
-    initialState : function() {
-        return [];
-    },
+    reducer : null,
     trigger : function() {
         this.context.dispatch(this.storeActions.change, this);
     },
@@ -25,6 +26,10 @@ Store.prototype = {
         this.context.handle(this.storeActions, {
             change : callback
         });
+    },
+    reduce : function(action, data) {
+        this.state = this.reducer.reduce(action, this.state, data);
+        this.trigger();
     }
 };
 
