@@ -1,35 +1,77 @@
 var express = require('express');
 var router = express.Router();
 
-var data = [
-    {id: 1, author: "Pete Hunt", title: "Title1", text: "This is one sample comment", date: "2015/12/25" },
-    {id: 2, author: "Jordan Walke",  title: "Title2", text: "This is *saved* sample comment", date: "2015/12/25" },
-    {id: 3, author: "Molly",  title: "Title3", text: "This is *saving* sample comment", date: "2015/12/25" },
-    {id: 4, author: "Margin",  title: "Title4", text: "This is *deleting* sample comment", date: "2015/12/25" },
-    {id: 5, author: "Hello",  title: "Title5", text: "This is *draft* sample comment", date: "2015/12/25" },
-    {id: 6, author: "Mike",  title: "Title6", text: "This is *modified* sample comment", date: "2015/12/25" }
-]; 
+var data = [ ]; 
 
 router.get('/notes', function(req, res, next) {
-	res.send({
-		meta: {
-			status: 1,
-			message: "Everything is peachy"
-		},
-		data: data
-	});
+	setTimeout(function() {
+	    res.send({
+			meta: {
+				status: 1,
+				message: "Everything is peachy"
+			},
+			data: data
+		});
+	}, 1000);
 });
 
 router.post('/notes', function(req, res, next) {
+	if (data.length > 100) {
+		data.splice(0, 50);
+	}
 	setTimeout(function() {
-	    res.send({hello:"hello"});
-	}, 500);
+		var responseData;
+		if (req.body.op === 'add') {
+			responseData = req.body;
+			responseData.id = (data.length > 0 ? (data[data.length - 1].id + 1) : 1);
+			responseData.op = undefined;
+			data.push(responseData);
+		} else if (req.body.op === 'update') {
+			var note = req.body;
+			for (var idx in data) {
+				if (data[idx].id == note.id) {
+					data[idx].title = note.title;
+					data[idx].text = note.text;
+					responseData = data[idx];
+				}
+			}
+		} else {
+			res.send({
+				meta: {
+					status: -1,
+					message: "Operation mismatched"
+				},
+				data: req.body
+			});
+		}
+
+	    res.send({
+			meta: {
+				status: 1,
+				message: "Everything is peachy"
+			},
+			data: responseData
+		});
+	}, 1000);
 });
 
-router.delete('/notes/:id', function(req, res, next) {
+router.delete('/notes', function(req, res, next) {
 	setTimeout(function() {
-	    res.send({hello:"hello"});
-	}, 500);
+	    var note = req.body;
+		for (var idx in data) {
+			if (data[idx].id == note.id) {
+				data.splice(idx, 1);
+				break;	
+			}
+		}
+		res.send({
+			meta: {
+				status: 1,
+				message: "Everything is peachy"
+			},
+			data: req.body
+		});
+	}, 1000);
 });
 
 module.exports = router;

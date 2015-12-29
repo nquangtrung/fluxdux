@@ -32815,16 +32815,31 @@ var FluxDux = require('fluxdux'),
     NoteStore = require('../stores/NoteStore.js');
 
 var NoteActionsHandler = {
+
 	save: function (data) {
+		var op = data.status === 'draft' ? 'add' : 'update';
 		NoteStore.reduce('noteSaving', data);
 		$.ajax({
 			url: '/api/notes',
-			method: 'POST',
-			data: data,
+			type: 'POST',
+			data: {
+				id: data.id,
+				title: data.input.title,
+				text: data.input.text,
+				date: data.date,
+				author: data.author,
+				op: op
+			},
 			dataType: 'json',
 			success: function (response, status, xhr) {
-				console.log('NoteActionsHandler.save', response);
-				NoteStore.reduce('noteSaved', data);
+				if (response.meta.status == 1) {
+					if (op === 'add') {
+						data.id = response.data.id;
+					}
+					NoteStore.reduce('noteSaved', data);
+				} else {
+					NoteStore.reduce('noteSaveFailed', data);
+				}
 			},
 			error: function (xhr, status, e) {
 				console.log('Error', status, e);
@@ -32835,7 +32850,7 @@ var NoteActionsHandler = {
 	load: function (data) {
 		$.ajax({
 			url: '/api/notes',
-			method: 'GET',
+			type: 'GET',
 			dataType: 'json',
 			success: function (response, status, xhr) {
 				NoteStore.reduce('noteLoaded', {
@@ -32850,6 +32865,18 @@ var NoteActionsHandler = {
 	},
 	delete: function (data) {
 		NoteStore.reduce('noteDeleting', data);
+		$.ajax({
+			url: '/api/notes',
+			type: 'DELETE',
+			data: data,
+			dataType: 'json',
+			success: function (response, status, xhr) {
+				NoteStore.reduce('noteDeleted', data);
+			},
+			error: function (xhr, status, e) {
+				NoteStore.reduce('noteSaveFailed', data);
+			}
+		});
 	}
 };
 
@@ -33018,9 +33045,7 @@ var NoteDetailHeader = React.createClass({ displayName: 'NoteDetailHeader',
     discardModification: function (e) {
         e.preventDefault();
         if (confirm("Are you sure you want to discard this?")) {
-            NoteStore.reduce("discardInput", {
-                id: this.props.note.id
-            });
+            NoteStore.reduce("discardInput", this.props.note);
             NoteUIStateStore.reduce("set", {
                 key: "editMode",
                 value: false
@@ -33043,7 +33068,13 @@ var NoteDetailHeader = React.createClass({ displayName: 'NoteDetailHeader',
     },
     deleteNote: function (e) {
         e.preventDefault();
-        NoteActions.delete(this.props.note);
+        if (confirm("Are you sure you want to delete this?")) {
+            NoteActions.delete(this.props.note);
+            NoteUIStateStore.reduce("set", {
+                key: "editMode",
+                value: false
+            });
+        }
     },
     saveNote: function (e) {
         e.preventDefault();
@@ -33058,12 +33089,7 @@ var NoteDetailHeader = React.createClass({ displayName: 'NoteDetailHeader',
             );
         }
 
-        var discardClassName = 'hidden';
-        if (this.props.note.status === 'modified') {
-            discardClassName = '';
-        }
-
-        if (this.props.editMode) {
+        if (this.props.editMode && (this.props.note.status === 'modified' || this.props.note.status === 'draft')) {
             return React.createElement(
                 'div',
                 { className: 'panel-heading panel-heading-nocurve', id: 'note-detail-header' },
@@ -33077,13 +33103,28 @@ var NoteDetailHeader = React.createClass({ displayName: 'NoteDetailHeader',
                     ),
                     React.createElement(
                         'a',
-                        { href: '#', className: "btn btn-default " + discardClassName, onClick: this.discardModification },
+                        { href: '#', className: 'btn btn-default', onClick: this.discardModification },
                         React.createElement(
                             'span',
                             { className: 'glyphicon glyphicon-floppy-remove' },
                             ' Discard'
                         )
                     ),
+                    React.createElement(
+                        'a',
+                        { href: '#', className: 'btn btn-danger', onClick: this.deleteNote },
+                        React.createElement('span', { className: 'glyphicon glyphicon-trash' })
+                    )
+                ),
+                React.createElement('div', { className: 'clearfix' })
+            );
+        } else if (this.props.editMode) {
+            return React.createElement(
+                'div',
+                { className: 'panel-heading panel-heading-nocurve', id: 'note-detail-header' },
+                React.createElement(
+                    'div',
+                    { className: 'btn-group pull-right' },
                     React.createElement(
                         'a',
                         { href: '#', className: 'btn btn-danger', onClick: this.deleteNote },
@@ -33167,7 +33208,7 @@ var NoteListHeader = require('./NoteListHeader.js');
 var NoteListFooter = require('./NoteListFooter.js');
 var NoteListItem = require('./NoteListItem.js');
 
-var NoteList = React.createClass({ displayName: 'NoteDetail',
+var NoteList = React.createClass({ displayName: 'NoteList',
     render: function () {
         var selectedId = this.props.selected;
         var input = this.props.input;
@@ -33342,7 +33383,10 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 		return state;
 	},
 	noteDraft: function (state) {
-		var tmpId = state[state.length - 1].id + 1;
+		var tmpId = 1;
+		if (state.length > 0) {
+			tmpId = state[state.length - 1].id + 1;
+		}
 		state.push({
 			id: tmpId,
 			author: "Guest",
@@ -33409,6 +33453,10 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 				break;
 			}
 		}
+		NoteUIStateStore.reduce("set", {
+			key: "currentNoteId",
+			value: -1
+		});
 		return state;
 	},
 	discardInput: function (state, data) {
@@ -33492,7 +33540,7 @@ var NoteUIStateStore = FluxDux.createStore('NoteUIStateStore', {
     },
     filter: function (state, data) {
         for (var idx in data) {
-            state.filter[idx] = data[idx];
+            state.filter[idx] = data[idx].toLowerCase();
         }
         return state;
     }

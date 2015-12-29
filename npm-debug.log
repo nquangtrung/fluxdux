@@ -1,44 +1,38 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'E:\\IDE\\nodejs\\\\node.exe',
-1 verbose cli   'E:\\IDE\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'login' ]
-2 info using npm@1.4.3
-3 info using node@v0.10.26
-4 verbose node symlink E:\IDE\nodejs\\node.exe
-5 verbose adduser before first PUT { name: 'trungtrontria',
-5 verbose adduser   salt: 'XXXXX',
-5 verbose adduser   password_sha: 'XXXXX',
-5 verbose adduser   email: 'nquangtrung@gmai.com',
-5 verbose adduser   _id: 'org.couchdb.user:trungtrontria',
-5 verbose adduser   type: 'user',
-5 verbose adduser   roles: [],
-5 verbose adduser   date: '2015-12-25T15:14:58.307Z' }
-6 verbose url raw /-/user/org.couchdb.user:trungtrontria
-7 verbose url resolving [ 'https://registry.npmjs.org/',
-7 verbose url resolving   './-/user/org.couchdb.user:trungtrontria' ]
-8 verbose url resolved https://registry.npmjs.org/-/user/org.couchdb.user:trungtrontria
-9 info trying registry request attempt 1 at 22:14:58
-10 http PUT https://registry.npmjs.org/-/user/org.couchdb.user:trungtrontria
-11 http 400 https://registry.npmjs.org/-/user/org.couchdb.user:trungtrontria
-12 verbose adduser back [ [Error: Unknown error while authenticating : -/user/org.couchdb.user:trungtrontria],
-12 verbose adduser   { ok: false, error: 'Unknown error while authenticating' },
-12 verbose adduser   '{"ok":false,"error":"Unknown error while authenticating"}' ]
-13 error Error: Unknown error while authenticating : -/user/org.couchdb.user:trungtrontria
-13 error     at RegClient.<anonymous> (E:\IDE\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:237:14)
-13 error     at Request.self.callback (E:\IDE\nodejs\node_modules\npm\node_modules\request\request.js:123:22)
-13 error     at Request.EventEmitter.emit (events.js:98:17)
-13 error     at Request.<anonymous> (E:\IDE\nodejs\node_modules\npm\node_modules\request\request.js:893:14)
-13 error     at Request.EventEmitter.emit (events.js:117:20)
-13 error     at IncomingMessage.<anonymous> (E:\IDE\nodejs\node_modules\npm\node_modules\request\request.js:844:12)
-13 error     at IncomingMessage.EventEmitter.emit (events.js:117:20)
-13 error     at _stream_readable.js:920:16
-13 error     at process._tickCallback (node.js:415:13)
-14 error If you need help, you may report this *entire* log,
-14 error including the npm and node versions, at:
-14 error     <http://github.com/npm/npm/issues>
-15 error System Windows_NT 6.2.9200
-16 error command "E:\\IDE\\nodejs\\\\node.exe" "E:\\IDE\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "login"
-17 error cwd F:\workspace\personal-learning-react\src\fluxdux
-18 error node -v v0.10.26
-19 error npm -v 1.4.3
-20 verbose exit [ 1, true ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'publish' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.40
+4 verbose node symlink /usr/bin/node
+5 verbose publish [ '.' ]
+6 verbose cache add [ '.', null ]
+7 verbose cache add name=undefined spec="." args=[".",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: '.',
+8 verbose parsed url   path: '.',
+8 verbose parsed url   href: '.' }
+9 silly lockFile 3a52ce78- .
+10 verbose lock . /home/nquangtrung/.npm/3a52ce78-.lock
+11 silly lockFile 3a52ce78- .
+12 silly lockFile 3a52ce78- .
+13 error addLocal Could not install .
+14 error Error: ENOENT, open 'package.json'
+15 error If you need help, you may report this *entire* log,
+15 error including the npm and node versions, at:
+15 error     <http://github.com/npm/npm/issues>
+16 error System Linux 3.13.0-53-generic
+17 error command "/usr/bin/node" "/usr/bin/npm" "publish"
+18 error cwd /media/data2/workspace/personal-learning-react/src/fluxdux
+19 error node -v v0.10.40
+20 error npm -v 1.4.28
+21 error path package.json
+22 error code ENOENT
+23 error errno 34
+24 verbose exit [ 34, true ]

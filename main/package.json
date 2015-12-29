@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "url": "https://github.com/nquangtrung/fluxdux",
   "author": {
     "name": "trungnq"
   },
@@ -14,5 +15,6 @@
   "readmeFilename": "README.md",
   "_id": "fluxdux@1.0.0",
   "_shasum": "c8efa53b63373f152ef64737f51838656755b252",
-  "_from": "fluxdux@"
+  "_from": "fluxdux@",
+  "dependencies": {}
 }

@@ -24,7 +24,7 @@ var NoteUIStateStore = FluxDux.createStore('NoteUIStateStore', {
     },
     filter : function(state, data) {
         for (var idx in data) {
-            state.filter[idx] = data[idx];
+            state.filter[idx] = data[idx].toLowerCase();
         }
         return state;
     }

@@ -4,7 +4,7 @@ var NoteListHeader = require('./NoteListHeader.js');
 var NoteListFooter = require('./NoteListFooter.js');
 var NoteListItem = require('./NoteListItem.js');
 
-var NoteList = React.createClass({displayName: 'NoteDetail',
+var NoteList = React.createClass({displayName: 'NoteList',
     render: function() {
         var selectedId = this.props.selected;
         var input = this.props.input;

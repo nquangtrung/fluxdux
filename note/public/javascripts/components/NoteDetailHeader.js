@@ -9,9 +9,7 @@ var NoteDetailHeader = React.createClass({displayName: 'NoteDetailHeader',
     discardModification : function(e) {
         e.preventDefault();
         if (confirm("Are you sure you want to discard this?")) {
-            NoteStore.reduce("discardInput", {
-                id: this.props.note.id
-            });
+            NoteStore.reduce("discardInput", this.props.note);
             NoteUIStateStore.reduce("set", {
                 key: "editMode",
                 value: false
@@ -34,7 +32,13 @@ var NoteDetailHeader = React.createClass({displayName: 'NoteDetailHeader',
     },
     deleteNote : function(e) {
         e.preventDefault();
-        NoteActions.delete(this.props.note);
+        if (confirm("Are you sure you want to delete this?")) {
+            NoteActions.delete(this.props.note);  
+            NoteUIStateStore.reduce("set", {
+                key: "editMode",
+                value: false    
+            }); 
+        }
     },
     saveNote : function(e) {
         e.preventDefault();
@@ -47,21 +51,27 @@ var NoteDetailHeader = React.createClass({displayName: 'NoteDetailHeader',
             );
         }
 
-        var discardClassName = 'hidden';
-        if (this.props.note.status === 'modified') {
-            discardClassName = '';
-        }
-        
-        if (this.props.editMode) {
+        if (this.props.editMode && (this.props.note.status === 'modified' || this.props.note.status === 'draft')) {
             return (
                 <div className="panel-heading panel-heading-nocurve" id="note-detail-header">
                     <div className="btn-group pull-right">
                         <a href="#" className="btn btn-default" >
                             <span className="glyphicon glyphicon-floppy-disk" onClick={this.saveNote} />
                         </a>
-                        <a href="#" className={"btn btn-default " + discardClassName} onClick={ this.discardModification } >
+                        <a href="#" className="btn btn-default" onClick={ this.discardModification } >
                             <span className="glyphicon glyphicon-floppy-remove" > Discard</span>
                         </a>
+                        <a href="#" className="btn btn-danger" onClick={ this.deleteNote }>
+                            <span className="glyphicon glyphicon-trash" />
+                        </a>
+                    </div>
+                    <div className="clearfix" />
+                </div>
+            );
+        } else if (this.props.editMode) {
+            return (
+                <div className="panel-heading panel-heading-nocurve" id="note-detail-header">
+                    <div className="btn-group pull-right">
                         <a href="#" className="btn btn-danger" onClick={ this.deleteNote }>
                             <span className="glyphicon glyphicon-trash" />
                         </a>

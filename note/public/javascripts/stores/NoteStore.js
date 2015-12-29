@@ -2,19 +2,6 @@ var FluxDux = require('fluxdux'),
 	moment = require('moment'),
 	NoteUIStateStore = require('../stores/NoteUIStateStore.js');
 
-var data = [
-    {id: 1, author: "Pete Hunt", title: "Title1", text: "This is one sample comment", date: "2015/12/25", status: "saved"},
-    {id: 2, author: "Jordan Walke",  title: "Title2", text: "This is *saved* sample comment", date: "2015/12/25", status: "saved"},
-    {id: 3, author: "Molly",  title: "Title3", text: "This is *saving* sample comment", date: "2015/12/25", status: "saving"},
-    {id: 4, author: "Margin",  title: "Title4", text: "This is *deleting* sample comment", date: "2015/12/25", status: "deleting"},
-    {id: 5, author: "Hello",  title: "Title5", text: "This is *draft* sample comment", date: "2015/12/25", 
-    		status: "draft",
-    		input: { title: 'Title draft', text: 'This is draft text'} },
-    {id: 6, author: "Mike",  title: "Title6", text: "This is *modified* sample comment", date: "2015/12/25", 
-    		status: "modified",
-    		input: { title: 'Title modified', text: 'This is modified text'} },
-]; 
-
 var NoteStore = FluxDux.createStore('NoteStore', {
 	initialState : function() {
 		return [];
@@ -30,7 +17,10 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 		return state;
 	},
 	noteDraft : function(state) {
-		var tmpId = state[state.length - 1].id + 1;
+		var tmpId = 1;
+		if (state.length > 0) {
+			tmpId = state[state.length - 1].id + 1;
+		}
 		state.push({
 			id: tmpId,
 			author: "Guest",
@@ -99,7 +89,11 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 				state.splice(idx, 1);
 				break;
 			}
-		} 
+		}
+		NoteUIStateStore.reduce("set", {
+                key: "currentNoteId",
+                value: -1
+            });
 		return state;
 	},
 	discardInput : function(state, data) {
