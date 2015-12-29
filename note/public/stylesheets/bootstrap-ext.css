@@ -1,0 +1,13 @@
+.panel-body-nopadding {
+    padding: 0px;
+}
+.panel-nocurve {
+    border-radius: 0;
+}
+.panel-heading-nocurve {
+    border-radius: 0;
+    height: 55px;
+}
+.panel-footer-nocurve {
+    border-radius: 0;
+}

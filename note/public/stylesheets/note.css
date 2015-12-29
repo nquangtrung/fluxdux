@@ -1,16 +1,3 @@
-.panel-body-nopadding {
-    padding: 0px;
-}
-.panel-nocurve {
-    border-radius: 0;
-}
-.panel-heading-nocurve {
-    border-radius: 0;
-}
-.panel-footer-nocurve {
-    border-radius: 0;
-}
-
 #note-list {
     padding: 0px;
 }
@@ -20,8 +7,35 @@
 }
 
 #note-list-container {
-    height: 400px;
+    height: 401px;
     overflow-y: auto;
+}
+
+.note-app-list-item h4.saving  {
+    color: #999 !important;
+}
+.note-app-list-item div.saving  {
+    color: #999 !important;
+}
+.note-app-list-item h4.deleting  {
+    color: #999 !important;
+    text-decoration: line-through;
+}
+.note-app-list-item div.deleting  {
+    color: #999 !important;
+    text-decoration: line-through;
+}
+.note-app-list-item h4.draft  {
+    font-style: italic;
+}
+.note-app-list-item div.draft  {
+    font-style: italic;
+}
+.note-app-list-item h4.modified  {
+    font-style: italic;
+}
+.note-app-list-item div.modified  {
+    font-style: italic;
 }
 
 #note-content {
@@ -31,11 +45,29 @@
 }
 
 #note-editor {
+    height: 400px;
     padding: 0px !important;
+
+    display: -moz-box;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+
+    position: relative;
+
+    background: red;
 }
+
 #note-editor-title {
     border: none;
     width: 100%;
+    height: 50px;
     font-size: 28px;
     padding: 10px;
     font-family: "Courier New";
@@ -45,13 +77,27 @@
     outline: 0;
 }
 
+.flex {
+    background:blue;
+    flex:1;
+    display:flex;
+}
+
 #note-editor-text {
+    position: absolute;
+
     border: none;
     width: 100%;
-    height: 345px;
+    height: 350px;
+    display:block;
+
     padding: 10px 10px 10px 10px;
     resize: none;
     font-family: "Courier New";
+
+    box-sizing: border-box;         /* For IE and modern versions of Chrome */
+    -moz-box-sizing: border-box;    /* For Firefox                          */
+    -webkit-box-sizing: border-box; /* For Safari                           */
 }
 
 #note-editor-text:focus {
