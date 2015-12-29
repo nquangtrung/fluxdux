@@ -1,11 +1,18 @@
 {
   "name": "fluxdux",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Flux and Redux together",
   "main": "fluxdux.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "trungnq",
-  "license": "ISC"
+  "author": {
+    "name": "trungnq"
+  },
+  "license": "ISC",
+  "readme": "# fluxdux\r\nFlux and Redux together\r\n",
+  "readmeFilename": "README.md",
+  "_id": "fluxdux@1.0.0",
+  "_shasum": "c8efa53b63373f152ef64737f51838656755b252",
+  "_from": "fluxdux@"
 }

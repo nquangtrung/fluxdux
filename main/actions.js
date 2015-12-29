@@ -16,6 +16,13 @@ Actions.prototype = {
 	addListener : function(listener) {
 		this._listeners.push(listener);
 	},
+	removeListener : function(listener) {
+		this._listeners.splice(this._listeners.indexOf(listener), 1);
+	},
+	clearListeners : function() {
+		console.log("clearListeners");
+		this._listeners = [];
+	},
 	hasActionType : function(type) {
 		return this.actions.indexOf(type) >= 0;
 	},

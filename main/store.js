@@ -13,6 +13,10 @@ function Store(context, name, reducer) {
     }
 }
 
+function unsubcribe(actions) {
+    actions.clearListeners();
+}
+
 Store.prototype = {
     storeActions : null,
     context : null,
@@ -20,16 +24,26 @@ Store.prototype = {
     name    : null,
     reducer : null,
     trigger : function() {
-        this.context.dispatch(this.storeActions.change, this);
+        this.context.dispatch(this.storeActions.change, this.state);
     },
     change : function(callback) {
         this.context.handle(this.storeActions, {
             change : callback
         });
+
+        var unsubcriber = (function(store) {
+            return function() {
+                unsubcribe(store.storeActions);
+            }
+        })(this);
+        return unsubcriber;
     },
     reduce : function(action, data) {
         this.state = this.reducer.reduce(action, this.state, data);
         this.trigger();
+    },
+    getState : function() {
+        return this.state;
     }
 };
 
