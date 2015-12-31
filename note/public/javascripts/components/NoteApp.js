@@ -1,14 +1,16 @@
-var React = require('react');
+var React   = require('react');
 var FluxDux = require('fluxdux');
 
 var NoteList    = require('./NoteList.js');
 var NoteDetail  = require('./NoteDetail.js');
 
-var NoteUIStateStore = require('../stores/NoteUIStateStore.js');
-var NoteStore = require('../stores/NoteStore.js');
+var NoteUIStateStore    = require('../stores/NoteUIStateStore.js');
+var NoteStore           = require('../stores/NoteStore.js');
 
-var NoteActions = require('../actions/NoteActions.js');
-var NoteActionsHandler = require('../actions/NoteActionsHandler.js')
+var NoteActions             = require('../actions/NoteActions.js');
+var NoteActionsHandler      = require('../actions/NoteActionsHandler.js')
+var NoteLocalActions        = require('../actions/NoteLocalActions.js');
+var NoteLocalActionsHandler = require('../actions/NoteLocalActionsHandler.js')
 
 var NoteApp = React.createClass({displayName: 'NoteApp',
     getInitialState : function() {
@@ -27,7 +29,8 @@ var NoteApp = React.createClass({displayName: 'NoteApp',
         this.unsubcribe1 = NoteUIStateStore.change(this.onUIStateChange);
         this.unsubcribe2 = NoteStore.change(this.onDataStateChange);
         
-        FluxDux.handle(NoteActions, NoteActionsHandler);
+        FluxDux.handle(NoteActions,         NoteActionsHandler);
+        FluxDux.handle(NoteLocalActions,    NoteLocalActionsHandler);
         NoteActions.load({});
     },
     componentWillUnmount : function() {

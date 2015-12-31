@@ -1,43 +1,23 @@
 var React = require('react');
 
-var NoteUIStateStore = require('../stores/NoteUIStateStore.js');
-var NoteStore = require('../stores/NoteStore.js');
-
 var NoteActions = require('../actions/NoteActions.js');
+var NoteLocalActions = require('../actions/NoteLocalActions.js');
 
 var NoteDetailHeader = React.createClass({displayName: 'NoteDetailHeader',
     discardModification : function(e) {
         e.preventDefault();
         if (confirm("Are you sure you want to discard this?")) {
-            NoteStore.reduce("discardInput", this.props.note);
-            NoteUIStateStore.reduce("set", {
-                key: "editMode",
-                value: false
-            });    
+            NoteLocalActions.discardInput(this.props.note);
         }
     },
     startEditor : function(e) {
         e.preventDefault();
-        if (!this.props.note.input) {
-            NoteStore.reduce('updateInput', {
-                id: this.props.note.id,
-                title: this.props.note.title,
-                text: this.props.note.text
-            });
-        }
-        NoteUIStateStore.reduce("set", {
-            key: "editMode",
-            value: true
-        });
+        NoteLocalActions.startEditor(this.props.note);
     },
     deleteNote : function(e) {
         e.preventDefault();
         if (confirm("Are you sure you want to delete this?")) {
-            NoteActions.delete(this.props.note);  
-            NoteUIStateStore.reduce("set", {
-                key: "editMode",
-                value: false    
-            }); 
+            NoteLocalActions.deleteNote(this.props.note);
         }
     },
     saveNote : function(e) {

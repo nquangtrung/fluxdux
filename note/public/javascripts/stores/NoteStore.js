@@ -1,6 +1,6 @@
 var FluxDux = require('fluxdux'),
-	moment = require('moment'),
-	NoteUIStateStore = require('../stores/NoteUIStateStore.js');
+	moment  = require('moment'),
+    NoteLocalActions = require('../actions/NoteLocalActions.js');
 
 var NoteStore = FluxDux.createStore('NoteStore', {
 	initialState : function() {
@@ -21,22 +21,21 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 		if (state.length > 0) {
 			tmpId = state[state.length - 1].id + 1;
 		}
-		state.push({
+
+		var newNote = {
 			id: tmpId,
 			author: "Guest",
 			title: "Untitled Note",
 			text: "",
-			date: moment().format(), 
+			date: moment().format(),
 			status: "draft",
 			input: {
 				title: "Untitled Note",
 				text: ""
 			}
-		});
-		NoteUIStateStore.reduce('setAll', [
-			{ type: 'editMode', value: true },
-			{ type: 'currentNoteId', value: tmpId }
-		]);
+		};
+		state.push(newNote);
+        NoteLocalActions.selectAndEditNote(newNote);
 		return state;
 	},
 	noteSaving : function(state, data) {
@@ -46,10 +45,7 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 				break;
 			}
 		}
-		NoteUIStateStore.reduce("set", {
-                key: "editMode",
-                value: false
-            });
+        NoteLocalActions.closeEditor();
 		return state;
 	}, 
 	noteSaveFailed : function(state, data) {
@@ -65,9 +61,13 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 		for (var idx in state) {
 			if (state[idx].id == data.id) {
 				state[idx].status = 'saved';
+                state[idx].title = state[idx].input.title;
+                state[idx].text = state[idx].input.text;
+                state[idx].input = null;
 				break;
 			}
 		}
+        NoteLocalActions.noteSaved(data);
 		return state;
 	},
 	noteDeleting : function(state, data) {
@@ -77,10 +77,7 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 				break;
 			}
 		}
-		NoteUIStateStore.reduce("set", {
-                key: "editMode",
-                value: false
-            });
+        NoteLocalActions.closeEditor();
 		return state;
 	},
 	noteDeleted : function(state, data) {
@@ -90,10 +87,7 @@ var NoteStore = FluxDux.createStore('NoteStore', {
 				break;
 			}
 		}
-		NoteUIStateStore.reduce("set", {
-                key: "currentNoteId",
-                value: -1
-            });
+        NoteLocalActions.noteDeleted();
 		return state;
 	},
 	discardInput : function(state, data) {

@@ -1,16 +1,13 @@
 var React = require('react');
 
-var NoteStore = require('../stores/NoteStore.js');
-var NoteUIStateStore = require('../stores/NoteUIStateStore.js');
+var NoteLocalActions = require('../actions/NoteLocalActions.js');
 
 var NoteListHeader = React.createClass({displayName: 'NoteListHeader',
     addDraft : function() {
-        NoteStore.reduce('noteDraft');
+        NoteLocalActions.noteDraft();
     },
     filter : function(e) {
-        NoteUIStateStore.reduce('filter', {
-            title: e.target.value
-        });
+        NoteLocalActions.filter(e.target.value);
     },
     render: function() {
         return (

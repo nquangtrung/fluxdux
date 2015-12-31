@@ -1,5 +1,4 @@
-var FluxDux = require('fluxdux'),
-	$ = require('jquery'),
+var $ = require('jquery'),
 	NoteStore = require('../stores/NoteStore.js');
 	
 var NoteActionsHandler = {
@@ -52,6 +51,10 @@ var NoteActionsHandler = {
 		});
 	},
 	delete: function(data) {
+		if (data.status === 'draft') {
+			NoteStore.reduce('noteDeleted', data);
+			return;
+		}
 		NoteStore.reduce('noteDeleting', data);
 		$.ajax({
 			url: '/api/notes',

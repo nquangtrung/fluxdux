@@ -7,13 +7,15 @@ var NoteListItem = require('./NoteListItem.js');
 var NoteList = React.createClass({displayName: 'NoteList',
     render: function() {
         var selectedId = this.props.selected;
-        var input = this.props.input;
         var filter = this.props.filter.title;
         var notes = this.props.data.map(function(note) {
             var selected = (selectedId === note.id);
             if (filter) {
-                if (note.title.toLowerCase().indexOf(filter) < 0 && 
-                    (!note.input || note.input.title.toLowerCase().indexOf(filter) < 0)) {
+                if (note.input) {
+                    if (note.input.title.toLowerCase().indexOf(filter) < 0) {
+                        return null;
+                    }
+                } else if (note.title.toLowerCase().indexOf(filter) < 0) {
                     return null;
                 }
             }
