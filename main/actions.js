@@ -3,7 +3,14 @@ const sRejectType = [
 ];
 
 function Actions(context, actions) {
-	this.actions = actions;
+	if (Array.isArray(actions)) {
+		this.actions = actions;
+	} else if (typeof (actions) === 'string') {
+		this.actions = [ actions ];
+	} else {
+		throw "Actions must be an array of string or a string itself";
+	}
+
     this._listeners = [];
 	this.createInvoker();
     this.context = context;

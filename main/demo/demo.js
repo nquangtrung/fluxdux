@@ -35,7 +35,7 @@ var store = FluxDux.createStore('notes', {
 });
 
 var actions = FluxDux.createActions(
-	[ "add", "delete", "list" ]
+	[ "add", "delete" ]
 );
 
 FluxDux.handle(actions, {
@@ -51,10 +51,10 @@ FluxDux.handle(actions, {
 
 var Demo = {
 	start : function() {
-		store.change(function(store) {
-            console.log("state updated");
-            for (var idx in store.state) {
-                var note = store.state[idx];
+		store.change(function(data) {
+            console.log("state updated", data);
+            for (var idx in data) {
+                var note = data[idx];
                 if (note.visibility === 'visible') {
                     console.log(idx, note);
                 }
