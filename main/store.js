@@ -14,7 +14,7 @@ function Store(context, name, reducer) {
 }
 
 function unsubcribe(actions) {
-    actions.clearListeners();
+    actions.removeListener(this);
 }
 
 Store.prototype = {

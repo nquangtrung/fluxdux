@@ -45,6 +45,11 @@ Actions.prototype = {
 	createInvoker : function() {
 		for (var idx in this.actions) {
 			var type = this.actions[idx];
+
+            if (sRejectType.indexOf(type) >= 0) {
+                console.error("Type " + type + " is rejected.");
+                continue;
+            }
             var invoker = (function(context, invokeFunc, type) {
                 return function(data) {
                     invokeFunc(context, type, data);

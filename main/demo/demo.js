@@ -35,7 +35,7 @@ var store = FluxDux.createStore('notes', {
 });
 
 var actions = FluxDux.createActions(
-	[ "add", "delete" ]
+	[ "add", "delete", "addListener" ]
 );
 
 FluxDux.handle(actions, {
@@ -51,7 +51,7 @@ FluxDux.handle(actions, {
 
 var Demo = {
 	start : function() {
-		store.change(function(data) {
+		var unsubcribe = store.change(function(data) {
             console.log("state updated", data);
             for (var idx in data) {
                 var note = data[idx];
@@ -60,6 +60,16 @@ var Demo = {
                 }
             }
         });
+        var unsubcribe2 = store.change(function(data) {
+            console.log("state updated 2", data);
+            for (var idx in data) {
+                var note = data[idx];
+                if (note.visibility === 'visible') {
+                    console.log(idx, note);
+                }
+            }
+        });
+        unsubcribe();
 
         actions.add({ text: "text1", author: "author1" });
         actions.add({ text: "text4", author: "author1" });
