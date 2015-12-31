@@ -22,9 +22,10 @@ Actions.prototype = {
 	_listeners : [],
 	addListener : function(listener) {
 		this._listeners.push(listener);
+        listener.id = this._listeners.length - 1;
 	},
 	removeListener : function(listener) {
-		this._listeners.splice(this._listeners.indexOf(listener), 1);
+		this._listeners.splice(listener.id, 1);
 	},
 	clearListeners : function() {
 		console.log("clearListeners");
