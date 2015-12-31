@@ -4,7 +4,7 @@
   "description": "Flux and Redux together",
   "main": "fluxdux.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node demo/demo.js"
   },
   "url": "https://github.com/nquangtrung/fluxdux",
   "author": {
