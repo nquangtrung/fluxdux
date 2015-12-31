@@ -7,10 +7,10 @@ This library is a mixture of both FLUX and Redux's features. Each `store` will o
 For more detail explaination, please follow this [tutorial][fluxdux_tutorial].
 ### Install
 Install directly from npm using command-line.
->>> npm install --save fluxdux
+> npm install --save fluxdux
 
 Or checkout from github
->>> git checkout https://github.com/nquangtrung/fluxdux
+> git checkout https://github.com/nquangtrung/fluxdux
 
 ### Usage
 Please see `demo/demo.js` for some quick usage example.
