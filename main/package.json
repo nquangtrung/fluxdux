@@ -1,20 +1,27 @@
 {
   "name": "fluxdux",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "Flux and Redux together",
   "main": "fluxdux.js",
   "scripts": {
     "test": "node demo/demo.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nquangtrung/fluxdux.git"
+  },
   "url": "https://github.com/nquangtrung/fluxdux",
   "author": {
     "name": "trungnq"
   },
+  "keywords": [
+    "fluxdux", "flux", "redux"
+  ],
   "license": "ISC",
-  "readme": "# fluxdux\r\nFlux and Redux together\r\n",
   "readmeFilename": "README.md",
-  "_id": "fluxdux@1.0.0",
-  "_shasum": "c8efa53b63373f152ef64737f51838656755b252",
-  "_from": "fluxdux@",
+  "bugs": {
+    "url": "https://github.com/nquangtrung/fluxdux/issues"
+  },
+  "homepage": "https://github.com/fluxdux/draggablejs",
   "dependencies": {}
 }

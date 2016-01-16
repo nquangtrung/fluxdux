@@ -9,8 +9,8 @@ For more detail explaination, please follow this [tutorial][fluxdux_tutorial].
 Install directly from npm using command-line.
 > npm install --save fluxdux
 
-Or checkout from github
-> git checkout https://github.com/nquangtrung/fluxdux
+Or clone from github
+> git clone https://github.com/nquangtrung/fluxdux
 
 ### Usage
 Please see `demo/demo.js` for some quick usage example.
@@ -19,7 +19,7 @@ Define `store` with its reducers.
 ```javascript
 var FluxDux = require('../fluxdux.js');
 var store = FluxDux.createStore('notes', {
-	initialState : function() { ... },
+    initialState : function() { ... },
     add : function(state, data) { 
         /* Add new note to current state and return a new state */ 
         return newState; 
@@ -40,12 +40,12 @@ var actions = FluxDux.createActions(
 How `handler` will connect `action` and `store`
 ```javascript
 FluxDux.handle(actions, {
-	add : function(data) {
+    add : function(data) {
         store.reduce("add", data);
-	},
-	delete : function(data) {
+    },
+    delete : function(data) {
         store.reduce("delete", data);
-	}
+    }
 });
 ```
 Actions can be dispatched through directly calling the method.
